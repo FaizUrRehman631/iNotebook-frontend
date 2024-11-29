@@ -1,8 +1,14 @@
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useContext} from "react";
+import NoteContext from "../context/notes/noteContext";
+
+
 
 
 const Noteitem = (props) => {
-  const { note, Image, Image1} = props;
+    const context = useContext(NoteContext);
+    const {deleteNote}= context;
+
+  const { updateNote ,note, Image, Image1} = props;    // Notes.js props destructring 
   const [currentImage, setCurrentImage] = useState(Image);
   useEffect(() => {
      setTimeout(() => {
@@ -17,12 +23,14 @@ const Noteitem = (props) => {
   return (
     <div className="col-md-6">
       <div className="card my-3">
-        <img src={currentImage} className="card-img-top" alt="Im" />
+        <img src={currentImage} className="card-img-top" alt="pics" />
         <div className="card-body">
          <div className="d-flex align-items-center">
          <h5 className="card-title "> {note.title}</h5>
-          <i className="fa-solid fa-trash mx-2"></i>
-          <i className="fa-solid fa-pen-to-square mx-2"></i>
+          <i className="fa-solid fa-trash mx-2" onClick={()=>{deleteNote(note._id) 
+           props.showAlert("Note deleted successfully", "success");
+           }}></i>
+          <i className="fa-solid fa-pen-to-square mx-2" onClick={()=>{updateNote(note)}}></i>
          </div>
           <p className="card-text">
             {note.description}
@@ -31,6 +39,7 @@ const Noteitem = (props) => {
             {note.tag}
           </a>
         </div>
+        <small className="text-muted text-center">Note Created On: {new Date(note.date).toUTCString()}</small>
       </div>
     </div>
   );
